@@ -9,6 +9,11 @@ namespace FunctionalProgramming_Demo
         public delegate bool FilterHandler(T something);
         public delegate T ReduceHandler(IEnumerable<T> something);
 
+        public T Twice(T input, MapHandler mapHandler)
+        {
+            return mapHandler(mapHandler(input));
+        }
+
         public IEnumerable<T> Map(IEnumerable<T> list, MapHandler mapFunction)
         {
             foreach(T value in list)
@@ -62,13 +67,22 @@ namespace FunctionalProgramming_Demo
             {
                 Console.WriteLine(value);
             }
+
+            Console.WriteLine("Pow^4: ");
+            foreach (int value in fpNumbers.Map(numbers, x => fpNumbers.Twice(x, y => (y * y)) ))
+            {
+                Console.WriteLine(value);
+            }
+
             Console.WriteLine("Even Numbers: ");
             foreach (int value in fpNumbers.Filter(numbers, x => (x % 2 == 0)))
             {
                 Console.WriteLine(value);
             }
+
             Console.WriteLine("Summation: ");
             Console.WriteLine(fpNumbers.Reduce(numbers, Summation));
+
             Console.WriteLine("Maximum: ");
             Console.WriteLine(
                 fpNumbers.Reduce(numbers,
@@ -106,8 +120,8 @@ namespace FunctionalProgramming_Demo
                 Console.WriteLine(name);
             }
 
-            Console.WriteLine("Perform Mehta: ");
-            fpNames.Perform(names, (given) => Console.WriteLine($"{given} Mehta"));
+            Console.WriteLine("Perform Greet: ");
+            fpNames.Perform(names, (given) => Console.WriteLine($"Hello {given}!"));
 
             Console.ReadLine();
         }
